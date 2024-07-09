@@ -2,11 +2,12 @@
 import Gameboard from './gameboard.js';
 
 class Player {
-  constructor(isComputer = false) {
+  constructor(name, isComputer = false) {
     this.gameboard = new Gameboard();
     this.isComputer = isComputer;
     this.previousHits = []; // Track previous hits for smart targeting
     this.allMoves = []; // Track all moves to avoid duplicate moves
+    this.name = name;
   }
 
   makeMove(coord, opponentGameboard) {

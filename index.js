@@ -3,8 +3,15 @@ import Player from './components/player.js';
 import Ship from './components/ship.js';
 
 document.addEventListener("DOMContentLoaded", () => {
-  const container = document.querySelector(".container");
   const body = document.querySelector('body');
+  
+  const playerHeading = document.createElement('h2');
+  playerHeading.textContent = 'YOU';
+  playerHeading.classList.add('pheading');
+
+  const enemyHeading = document.createElement('h2');
+  enemyHeading.textContent = 'ENEMY';
+  enemyHeading.classList.add('eheading');
 
   const playerBoardElement = document.createElement("div");
   playerBoardElement.classList.add("board", "player-board");
@@ -17,29 +24,40 @@ document.addEventListener("DOMContentLoaded", () => {
   newGameButton.classList.add('new-game-btn');
 
   body.appendChild(newGameButton);
-  container.appendChild(playerBoardElement);
-  container.appendChild(enemyBoardElement);
+  body.appendChild(playerBoardElement);
+  body.appendChild(enemyBoardElement);
+  body.appendChild(playerHeading);
+  body.appendChild(enemyHeading);
 
   let player1, player2, currentPlayer;
 
   function initializeGame() {
+
+    
+
     player1 = new Player();
     player2 = new Player(true); // Computer player
     currentPlayer = player1;
 
+    const carrier = new Ship(5, 0, false);
+    const battleship = new Ship(4, 0, false);
+    const cruiser = new Ship(3, 0, false);
+    const submarine = new Ship(3, 0, false);
+    const destroyer = new Ship(2, 0, false);
+
     // Place ships for player1 (could be dynamic or random)
-    player1.gameboard.placeShip(new Ship(5), [[0, 0], [0, 1], [0, 2], [0, 3], [0, 4]]);
-    player1.gameboard.placeShip(new Ship(4), [[0, 6], [0, 7], [0, 8], [0, 9]]);
-    player1.gameboard.placeShip(new Ship(3), [[2, 0], [3, 0], [4, 0]]);
-    player1.gameboard.placeShip(new Ship(3), [[7, 0], [8, 0], [9, 0]]);
-    player1.gameboard.placeShip(new Ship(2), [[6, 8], [7, 8]]);
+    player1.gameboard.placeShip(carrier, [[0, 0], [0, 1], [0, 2], [0, 3], [0, 4]]);
+    player1.gameboard.placeShip(battleship, [[0, 6], [0, 7], [0, 8], [0, 9]]);
+    player1.gameboard.placeShip(cruiser, [[2, 0], [3, 0], [4, 0]]);
+    player1.gameboard.placeShip(submarine, [[7, 0], [8, 0], [9, 0]]);
+    player1.gameboard.placeShip(destroyer, [[6, 8], [7, 8]]);
 
     // Place ships for player2 (computer)
-    player2.gameboard.placeShip(new Ship(5), [[0, 0], [0, 1], [0, 2], [0, 3], [0, 4]]);
-    player2.gameboard.placeShip(new Ship(4), [[0, 6], [0, 7], [0, 8], [0, 9]]);
-    player2.gameboard.placeShip(new Ship(3), [[2, 0], [3, 0], [4, 0]]);
-    player2.gameboard.placeShip(new Ship(3), [[7, 0], [8, 0], [9, 0]]);
-    player2.gameboard.placeShip(new Ship(2), [[6, 8], [7, 8]]);
+    player2.gameboard.placeShip(carrier, [[0, 0], [0, 1], [0, 2], [0, 3], [0, 4]]);
+    player2.gameboard.placeShip(battleship, [[0, 6], [0, 7], [0, 8], [0, 9]]);
+    player2.gameboard.placeShip(cruiser, [[2, 0], [3, 0], [4, 0]]);
+    player2.gameboard.placeShip(submarine, [[7, 0], [8, 0], [9, 0]]);
+    player2.gameboard.placeShip(destroyer, [[6, 8], [7, 8]]);
 
     renderBoard(player1.gameboard, playerBoardElement);
     renderBoard(player2.gameboard, enemyBoardElement, true);

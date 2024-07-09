@@ -8,10 +8,6 @@ function delay(ms) {
 
 document.addEventListener("DOMContentLoaded", () => {
   const body = document.querySelector('body');
-  
-  const playerHeading = document.createElement('h2');
-  playerHeading.textContent = 'YOU';
-  playerHeading.classList.add('pheading');
 
   const enemyHeading = document.createElement('h2');
   enemyHeading.textContent = 'ENEMY';
@@ -42,6 +38,9 @@ document.addEventListener("DOMContentLoaded", () => {
     textBox.classList.add('text-box');
     textBox.textContent = `${name}'s turn, click the enemies board where you would like to strike`;
 
+    const playerHeading = document.createElement('h2');
+    playerHeading.textContent = `${name}`;
+    playerHeading.classList.add('pheading');
 
     body.style.scale = 1;
 
@@ -115,7 +114,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (player1.gameboard.allShipsSunk() || player2.gameboard.allShipsSunk()) {
-      alert(`${currentPlayer === player1 ? 'Player 2' : 'Player 1'} wins!`);
+      textBox.textContent = `${currentPlayer === player1 ? `${player1.name}` : 'Computer'} wins!`;
       return;
     }
 
@@ -127,18 +126,26 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  function handleComputerMove(coord) {
+  async function handleComputerMove(coord) {
     const cell = playerBoardElement.querySelector(`[data-coord="${coord.join(',')}"]`);
+    textBox.textContent = 'Computer is striking...';
+    await delay(1500);
     const result = currentPlayer.makeMove(coord, player1.gameboard);
 
     if (result) {
       cell.style.backgroundColor = 'red'; // Hit
+      textBox.textContent = 'BOOOOM!';
+      textBox.textContent += ` ${coord}...noted`;
     } else {
       cell.style.backgroundColor = 'orange'; // Miss
+      textBox.textContent = 'Lucky this time...';
     }
 
-    if (player1.gameboard.allShipsSunk()) {
-      alert('Computer wins!');
+    
+    await delay(1000);
+
+    if (currentPlayer.gameboard.allShipsSunk()) {
+      textBox.textContent = 'Computer wins!';
     } else {
       currentPlayer = player1; // Switch back to player1
     }

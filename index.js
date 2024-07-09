@@ -2,6 +2,10 @@
 import Player from './components/player.js';
 import Ship from './components/ship.js';
 
+function delay(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   const body = document.querySelector('body');
   
@@ -23,20 +27,26 @@ document.addEventListener("DOMContentLoaded", () => {
   newGameButton.textContent = "New Game";
   newGameButton.classList.add('new-game-btn');
 
-  body.appendChild(newGameButton);
-  body.appendChild(playerBoardElement);
-  body.appendChild(enemyBoardElement);
-  body.appendChild(playerHeading);
-  body.appendChild(enemyHeading);
+  const textBox = document.createElement('div');
+
+  let playerName;
 
   let player1, player2, currentPlayer;
 
-  function initializeGame() {
+  body.style.scale = 0.8;
 
-    
+  function initializeGame(name, difficulty) {
 
-    player1 = new Player();
-    player2 = new Player(true); // Computer player
+    name = name === '' || undefined ? 'Player 1' : name;
+
+    textBox.classList.add('text-box');
+    textBox.textContent = `${name}'s turn, click the enemies board where you would like to strike`;
+
+
+    body.style.scale = 1;
+
+    player1 = new Player(name);
+    player2 = new Player('computer', true); // Computer player
     currentPlayer = player1;
 
     const carrier = new Ship(5, 0, false);
@@ -59,11 +69,18 @@ document.addEventListener("DOMContentLoaded", () => {
     player2.gameboard.placeShip(submarine, [[7, 0], [8, 0], [9, 0]]);
     player2.gameboard.placeShip(destroyer, [[6, 8], [7, 8]]);
 
+    body.appendChild(newGameButton);
+    body.appendChild(playerBoardElement);
+    body.appendChild(enemyBoardElement);
+    body.appendChild(playerHeading);
+    body.appendChild(enemyHeading);
+    body.appendChild(textBox);
+
     renderBoard(player1.gameboard, playerBoardElement);
     renderBoard(player2.gameboard, enemyBoardElement, true);
   }
 
-  function renderBoard(gameboard, boardElement, isEnemy = false) {
+  async function renderBoard(gameboard, boardElement, isEnemy = false) {
     boardElement.innerHTML = ''; // Clear existing grid cells
     const size = 10;
 
@@ -80,6 +97,8 @@ document.addEventListener("DOMContentLoaded", () => {
           }
         }
 
+        await delay(3);
+
         boardElement.appendChild(gridCell);
       }
     }
@@ -90,7 +109,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const result = currentPlayer.makeMove(coord, currentPlayer === player1 ? player2.gameboard : player1.gameboard);
 
     if (result) {
-      event.target.style.backgroundColor = 'red'; // Hit
+      event.target.style.backgroundColor = 'green'; // Hit
     } else {
       event.target.style.backgroundColor = 'blue'; // Miss
     }
@@ -115,7 +134,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (result) {
       cell.style.backgroundColor = 'red'; // Hit
     } else {
-      cell.style.backgroundColor = 'blue'; // Miss
+      cell.style.backgroundColor = 'orange'; // Miss
     }
 
     if (player1.gameboard.allShipsSunk()) {
@@ -125,8 +144,21 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  newGameButton.addEventListener("click", initializeGame);
+  newGameButton.addEventListener("click", () => {
+    initializeGame(playerName);
+  });
   enemyBoardElement.addEventListener("click", handleAttack);
 
-  initializeGame(); // Initial setup
+
+  const dialogBtn = document.querySelector('.dialogBtn')
+  const dialog = document.getElementById('startGame');
+  dialog.showModal();
+
+  dialogBtn.addEventListener('click', () => {
+    
+    playerName = document.getElementById('player1').value;
+
+    initializeGame(playerName); // Initial setup
+  })
+
 });

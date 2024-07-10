@@ -48,25 +48,11 @@ document.addEventListener("DOMContentLoaded", () => {
     player2 = new Player('computer', true); // Computer player
     currentPlayer = player1;
 
-    const carrier = new Ship(5, 0, false);
-    const battleship = new Ship(4, 0, false);
-    const cruiser = new Ship(3, 0, false);
-    const submarine = new Ship(3, 0, false);
-    const destroyer = new Ship(2, 0, false);
-
     // Place ships for player1 (could be dynamic or random)
-    player1.gameboard.placeShip(carrier, [[0, 0], [0, 1], [0, 2], [0, 3], [0, 4]]);
-    player1.gameboard.placeShip(battleship, [[0, 6], [0, 7], [0, 8], [0, 9]]);
-    player1.gameboard.placeShip(cruiser, [[2, 0], [3, 0], [4, 0]]);
-    player1.gameboard.placeShip(submarine, [[7, 0], [8, 0], [9, 0]]);
-    player1.gameboard.placeShip(destroyer, [[6, 8], [7, 8]]);
+    player1.gameboard.placeShips();
 
     // Place ships for player2 (computer)
-    player2.gameboard.placeShip(carrier, [[0, 0], [0, 1], [0, 2], [0, 3], [0, 4]]);
-    player2.gameboard.placeShip(battleship, [[0, 6], [0, 7], [0, 8], [0, 9]]);
-    player2.gameboard.placeShip(cruiser, [[2, 0], [3, 0], [4, 0]]);
-    player2.gameboard.placeShip(submarine, [[7, 0], [8, 0], [9, 0]]);
-    player2.gameboard.placeShip(destroyer, [[6, 8], [7, 8]]);
+    player2.gameboard.placeShips();
 
     body.appendChild(newGameButton);
     body.appendChild(playerBoardElement);
@@ -78,6 +64,8 @@ document.addEventListener("DOMContentLoaded", () => {
     renderBoard(player1.gameboard, playerBoardElement);
     renderBoard(player2.gameboard, enemyBoardElement, true);
   }
+
+  
 
   async function renderBoard(gameboard, boardElement, isEnemy = false) {
     boardElement.innerHTML = ''; // Clear existing grid cells
